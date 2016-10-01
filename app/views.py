@@ -29,5 +29,25 @@ def search():
                     payload["relations"].append({"key1": taxonomy.index(element)+1 , "key2": int(taxonomy.index(element)), "relation" : "belongs to" })
             payload["entities1"].append({"key": i , "value1" : search_query })
             payload["relations"].append({"key1": i , "key2": i-1, "relation" : "belongs to" })
-        return render_template('concept-map.html',payload=payload)
+        try:
+            payload["entities1"].append({"key": i+1 , "value1" : result["concept"][0]["website"] })
+            payload["relations"].append({"key1": i, "key2": i+1 , "relation" : "found at" })
+        except:
+            print "No web"
+        try:
+            payload["entities1"].append({"key": i+2 , "value1" : result["concept"][0]["dbpedia"] })
+            payload["relations"].append({"key1": i, "key2": i+2 , "relation" : "found at" })
+        except:
+            print "No db"
+        try:
+            payload["entities1"].append({"key": i+3 , "value1" : result["concept"][0]["freebase"] })
+            payload["relations"].append({"key1": i, "key2": i+3 , "relation" : "found at" })
+        except:
+            print "no freebase"
+        try:
+            payload["entities1"].append({"key": i+4 , "value1" : result["concept"][0]["yago"] })
+            payload["relations"].append({"key1": i, "key2": i+4 , "relation" : "found at" })
+        except:
+            return render_template('concept-map.html',payload=payload)
+    return render_template('concept-map.html',payload=payload)
     return "Sorry couldn't find the term"
